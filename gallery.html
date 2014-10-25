@@ -1,0 +1,117 @@
+<script>
+jQuery(".count").hide();
+
+jQuery('.article').hover(function () {
+        jQuery(this).find('.count').slideDown('fast');
+    }, function () {
+        jQuery(this).find('.count').slideUp('fast');
+    });
+
+    jQuery('.article').hover(function () {
+        jQuery(this).find('.count').fadeIn('fast');
+    }, function () {
+        jQuery(this).find('.count').fadeOut('fast');
+    });
+
+jQuery(document).ready(function () {
+	jQuery(".more_module").click( function (){
+		//jQuery(this).parent().parent().find(".more_module_box").slideDown('slow');
+		jQuery(this).parent().parent().find('.more_module_box').fadeIn('fast');
+	 });
+    jQuery(".btn_close").click( function (){
+		jQuery(this).parent().parent().find(".more_module_box").hide();
+	 });
+});
+jQuery(".tab_module").click(function(){
+	jQuery(this).parent().find(".more_module_box").hide();
+});
+</script>
+
+<div class="tab_tit_box">
+	<a href="{$tab->url}" class="tab_tit">{$tab->title}</a>
+	<!--@if($widget_info->page_count > 1 && $widget_info->list_count<$_idx)-->
+	<ul class="widgetNavigator">
+		<li><button type="button" class="prev" title="{$lang->cmd_prev}" onclick="content_widget_prev(jQuery(this).parents('div.tab_tit_box').next('ul.wdg_gal_theme'),{$widget_info->list_count})"><span>{$lang->cmd_prev}</span></button></li>
+		<li><button type="button" class="next" title="{$lang->cmd_next}" onclick="content_widget_next(jQuery(this).parents('div.tab_tit_box').next('ul.wdg_gal_theme'),{$widget_info->list_count})"><span>{$lang->cmd_next}</span></button></li>
+	</ul>
+	<!--@end-->
+</div>
+
+
+
+<ul class="wdg_gal_theme" style="width:{$widget_info->cols_list_count*($widget_info->thumbnail_width+20)}px;">
+{@$_idx=0}
+    <!--@foreach($widget_info->content_items as $key => $item)-->
+    <li<!--@if($_idx>0 && $_idx % $widget_info->cols_list_count==0)--> class="clearLeft article"<!--@end--> style="<!--@if($_idx >= $widget_info->list_count)-->display:none;<!--@end-->width:{$widget_info->thumbnail_width}px;" class="article">
+		<!--@foreach($widget_info->option_view_arr as $k => $v)-->
+
+			<!--@if($item->getThumbnail())-->
+				<!--@if($v=='thumbnail')-->
+
+				<a href="{$item->getLink()}">
+					<img src="{$item->getThumbnail()}" style="width:{$widget_info->thumbnail_width}px;height:{$widget_info->thumbnail_height}px;display:block"/>
+					<div style="padding:10px">
+						<div><span class="title">{$item->getTitle($widget_info->subject_cut_size)}</span></div>
+						<div class="c">
+							<!--@if($widget_info->show_category=='Y' && $item->getCategory())-->
+							<span class="cat">{$item->getCategory()}<span class="bar"> | </span></span>
+							<!--@else--><!--@end--><span class="author">{$item->getNickName()}</span>
+						</div>
+							<p class="count">
+								<span class="hit"><strong>조회</strong><em><!--@if($item->getReadedCount())-->{$item->getReadedCount()}<!--@else-->0<!--@end--></em></span>
+								<span class="like"><strong>좋아요</strong><em><!--@if($v=='voted_count')-->{$item->getVotedCount()}<!--@else-->0<!--@end--></em></span>
+								<span class="reply"><strong>댓글수</strong><em><!--@if($widget_info->show_comment_count=='Y' && $item->getCommentCount())-->{$item->getCommentCount()}<!--@else-->0<!--@end--></em></span>
+								<!--@if($item->printExtraImages())--><span class="file"><strong>첨부파일</strong></span><!--@end-->
+
+							</p>
+					</div>
+				</a>
+				<!--@end-->
+			<!--@else-->
+				<!--@if($v=='title')-->
+				<div style="display:block;width:{$widget_info->thumbnail_width-20}px;padding:10px;height:{$widget_info->thumbnail_height+36}px;overflow:hidden;background:#F6F6F6">
+					<div style="">
+						<a href="{$item->getLink()}">
+							<div style="font-size: 1.34em;white-space: normal;font-family: Dotum,돋움,Helvetica,AppleSDGothicNeo,sans-serif;	font-weight: bold;line-height: 23px;height:45px; overflow:hidden;margin-bottom:10px">{$item->getTitle()}</div>
+						</a>
+						<div class="c">
+							<!--@if($widget_info->show_category=='Y' && $item->getCategory())-->
+							<span class="cat">{$item->getCategory()}<span class="bar"> | </span></span>
+							<!--@else--><!--@end--><span class="author">{$item->getNickName()}</span>
+						</div>
+					</div>
+					<p class="count">
+						<span class="hit"><strong>조회</strong><em><!--@if($item->getReadedCount())-->{$item->getReadedCount()}<!--@else-->0<!--@end--></em></span>
+						<span class="like"><strong>좋아요</strong><em><!--@if($v=='voted_count')-->{$item->getVotedCount()}<!--@else-->0<!--@end--></em></span>
+						<span class="reply"><strong>댓글수</strong><em><!--@if($widget_info->show_comment_count=='Y' && $item->getCommentCount())-->{$item->getCommentCount()}<!--@else-->0<!--@end--></em></span>
+						<!--@if($item->printExtraImages())--><span class="file"><strong>첨부파일</strong></span><!--@end-->
+					</p>
+
+					<a href="{$item->getLink()}">
+						<div style="font-family: Dotum,돋움,Helvetica,AppleSDGothicNeo,sans-serif;font-size: 12px;color: #888;white-space: normal;line-height: 18px;">{$item->getContent($widget_info->content_cut_size-50)}</div>
+					</a>
+				</div>
+				<!--@end-->
+			<!--@end-->
+
+		<!--@end-->
+    </li>
+    {@$_idx++}
+    <!--@end-->
+</ul>
+
+<div class="notice_box">
+	<strong style="color:#2F3743;font-weight:normal;margin-right:5px;padding: 4px 0 0 17px;background: url(http://img.naver.net/static/www/2014/sp_vertical201406.png) no-repeat 0 -245px;" class="more_module">이온디 테마캐스트</strong>
+	<span class="bar" style="color:#CFD0D1"> | </span>
+	<span style="padding: 0 0 0 5px;letter-spacing:-1px">이온디 모든 게시판 중 가장 최근 작성된 게시판 10개를 추출하여 보여줍니다.</span>
+	<span class="btn_buy"><a href="http://eond.com/look_widget/351203">위젯구매</a></span>
+<!--
+ onClick="alert('구매 페이지 준비 중입니다. 빠른 구매를 희망하시는 분은 eond@eond.com 이나 카톡 아이디 \'@eond\'을 추가하셔서 문의주세요.')"
+ -->
+
+	<div class="more_module_box">
+		{@ sort($widget_info->tab); }
+		<!--@foreach($widget_info->tab as $module_srl => $tab)--><span class="module_title"><a href="{$tab->url}">{$tab->title}</a></span><!--@end-->
+		<span class="btn_close">닫기</span>
+	</div>
+</div>
